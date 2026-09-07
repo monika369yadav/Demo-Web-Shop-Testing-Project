@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Web Shop — Manual Testing Project</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f9;color:#1a1a1a;min-height:100vh}
+.topbar{background:#1a4a6e;color:#fff;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.topbar-title{font-size:18px;font-weight:600}
+.topbar-sub{font-size:12px;opacity:.75;margin-top:4px}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;letter-spacing:.3px}
+.badge-public{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3)}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.metric-card{background:#fff;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.metric-num{font-size:26px;font-weight:700;color:#1a4a6e}
+.metric-label{font-size:11px;color:#888;margin-top:4px}
+
+.tabs{display:flex;gap:2px;background:#fff;border-radius:10px;padding:6px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);flex-wrap:wrap}
+.tab{flex:1;min-width:110px;font-size:13px;padding:9px 10px;cursor:pointer;border:none;background:none;color:#666;border-radius:7px;font-weight:500;transition:all .2s}
+.tab.active{background:#1a4a6e;color:#fff}
+.tab:hover:not(.active){background:#f0f4f8;color:#1a4a6e}
+.panel{display:none}
+.panel.active{display:block}
+
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);padding:20px;margin-bottom:16px}
+.card h3{font-size:14px;color:#1a4a6e;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card p{font-size:13px;color:#444;line-height:1.7}
+.card ul{font-size:13px;color:#444;line-height:1.8;padding-left:20px;margin-top:6px}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:10px;overflow:hidden}
+thead tr{background:#f8fafc}
+th{font-size:10px;font-weight:700;color:#888;text-align:left;padding:10px 12px;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid #eef0f3}
+td{padding:11px 12px;vertical-align:top;color:#333;border-bottom:1px solid #f2f4f7;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfc}
+.table-wrap{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;overflow-x:auto}
+
+.sbadge{display:inline-block;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.s-pass{background:#e8f5e9;color:#2e7d32}
+.s-fail{background:#ffebee;color:#c62828}
+.s-pending{background:#fff3e0;color:#e65100}
+.s-open{background:#ffebee;color:#c62828}
+.s-covered{background:#e8f5e9;color:#2e7d32}
+.s-progress{background:#fff3e0;color:#e65100}
+.s-notstarted{background:#f3f4f6;color:#555}
+
+.sev-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.sev-medium{background:#e67e22}
+.sev-high{background:#e74c3c}
+
+.module-tag{display:inline-block;font-size:10.5px;background:#e8f0f7;color:#1a4a6e;padding:2px 9px;border-radius:20px;font-weight:600}
+
+.section-title{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin:24px 0 10px}
+.section-title:first-child{margin-top:0}
+
+.bug-detail{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:12.5px;margin-bottom:6px}
+.bug-detail b{color:#1a4a6e}
+
+.tree{font-family:'SF Mono',Monaco,monospace;font-size:12px;color:#333;line-height:1.8;background:#f8fafc;padding:14px 18px;border-radius:8px}
+
+.screenshot-box{border:1px solid #eef0f3;border-radius:8px;overflow:hidden;margin-top:10px}
+.screenshot-box img{width:100%;display:block}
+
+.credit{text-align:center;font-size:11px;color:#aaa;padding:20px;margin-top:8px}
+.credit a{color:#1a4a6e;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">🧪 Demo Web Shop — Manual Testing Project</div>
+    <div class="topbar-sub">QA Portfolio Project &nbsp;·&nbsp; Application Under Test: demowebshop.tricentis.com &nbsp;·&nbsp; By Monika Yadav</div>
+  </div>
+  <span class="badge badge-public">Public Portfolio Project</span>
+</div>
+
+<div class="wrap">
+
+  <div class="metrics">
+    <div class="metric-card"><div class="metric-num">16</div><div class="metric-label">Test Cases</div></div>
+    <div class="metric-card"><div class="metric-num">7</div><div class="metric-label">Modules in Scope</div></div>
+    <div class="metric-card"><div class="metric-num">4</div><div class="metric-label">Bugs Logged</div></div>
+    <div class="metric-card"><div class="metric-num">2</div><div class="metric-label">UX Suggestions</div></div>
+    <div class="metric-card"><div class="metric-num">17</div><div class="metric-label">Requirements (RTM)</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview',this)">📋 Overview</button>
+    <button class="tab" onclick="switchTab('scenarios',this)">🗂️ Scenarios</button>
+    <button class="tab" onclick="switchTab('testcases',this)">✅ Test Cases</button>
+    <button class="tab" onclick="switchTab('bugs',this)">🐛 Bug Reports</button>
+    <button class="tab" onclick="switchTab('rtm',this)">📊 RTM</button>
+    <button class="tab" onclick="switchTab('suggestions',this)">💡 Suggestions</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="panel active">
+    <div class="card">
+      <h3>📌 Project Overview</h3>
+      <p>A complete manual testing portfolio project performed on the <b>Demo Web Shop</b> (sample e-commerce application by Tricentis), built to demonstrate practical QA skills including test case design, exploratory testing, bug reporting, and requirement traceability. This project simulates a real-world QA engagement — independently planning, designing, and executing manual test cases, identifying defects, and maintaining full testing artifacts the same way a QA Tester would in an actual product team.</p>
+    </div>
+
+    <div class="card">
+      <h3>🌐 Application Under Test</h3>
+      <div class="bug-detail"><b>Application:</b><span>Demo Web Shop</span></div>
+      <div class="bug-detail"><b>URL:</b><span><a href="https://demowebshop.tricentis.com" style="color:#1a4a6e">demowebshop.tricentis.com</a></span></div>
+      <div class="bug-detail"><b>Type:</b><span>Sample E-Commerce Web Application (built on nopCommerce)</span></div>
+      <div class="bug-detail"><b>Provided by:</b><span>Tricentis (for public QA practice and training)</span></div>
+    </div>
+
+    <div class="card">
+      <h3>🎯 Testing Scope</h3>
+      <ul>
+        <li>Functional testing of core e-commerce flows (Browse, Cart, Checkout, Account)</li>
+        <li>UI/UX validation and usability observations</li>
+        <li>Cross-browser sanity checks</li>
+        <li>Negative and boundary testing on forms and inputs</li>
+        <li>Defect identification, classification, and reporting</li>
+      </ul>
+      <p style="margin-top:10px"><b>Out of Scope:</b> Performance testing, security/penetration testing, backend/database testing, automated test execution</p>
+    </div>
+
+    <div class="card">
+      <h3>🧩 Modules Tested</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="module-tag">Books</span>
+        <span class="module-tag">Computers</span>
+        <span class="module-tag">Electronics</span>
+        <span class="module-tag">Shopping Cart</span>
+        <span class="module-tag">Checkout</span>
+        <span class="module-tag">Register / Login</span>
+        <span class="module-tag">Search</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🛠️ Tools Used</h3>
+      <ul>
+        <li><b>Browser DevTools</b> — UI inspection, responsive checks</li>
+        <li><b>Markdown / GitHub</b> — Test documentation and version control</li>
+        <li><b>Snipping Tool</b> — Visual defect evidence</li>
+        <li><b>ChatGPT / Claude AI</b> — Assisted in structuring documentation and brainstorming test scenarios</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🔍 Key Findings & Observations</h3>
+      <ul>
+        <li><b>Site-wide pattern:</b> Products missing "Add to Cart" button and stock-status message — found across Books, Computers (Desktops), and Electronics (Camera/Photo, Cell phones), not limited to one category</li>
+        <li><b>Critical:</b> Store search returns "No products found" for every keyword tested, including exact, existing category names like "Books" and "Computers" — search is effectively non-functional</li>
+        <li>Manufacturer page ("Tricentis") renders with no products and no empty-state message</li>
+        <li>State/Province dropdown does not list actual states when Country = India during checkout</li>
+        <li>Register, Login (positive and negative paths), and Gift Card recipient validation all function correctly</li>
+        <li>Cart and pricing calculations, including payment-method additional fees, were verified to be accurate at checkout</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div id="scenarios" class="panel">
+    <div class="section-title">Books / Product Listing Module</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">TS-BOOK-01</td><td>Verify all products under the Books category load correctly with image, title, and price</td></tr>
+          <tr><td class="mono">TS-BOOK-02</td><td>Verify "Add to Cart" button is available and functional for all in-stock products</td></tr>
+          <tr><td class="mono">TS-BOOK-03</td><td>Verify products with no stock status display an appropriate availability message</td></tr>
+          <tr><td class="mono">TS-BOOK-04</td><td>Verify sorting functionality (Position, Name, Price Low-High, Price High-Low)</td></tr>
+          <tr><td class="mono">TS-BOOK-05</td><td>Verify "Filter by Price" functionality returns correct results</td></tr>
+          <tr><td class="mono">TS-BOOK-06</td><td>Verify pagination / "Display per page" option works correctly</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Shopping Cart Module</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">TS-CART-01</td><td>Verify items can be added to cart from product listing and product detail pages</td></tr>
+          <tr><td class="mono">TS-CART-02</td><td>Verify cart quantity can be updated and totals recalculate correctly</td></tr>
+          <tr><td class="mono">TS-CART-03</td><td>Verify items can be removed from cart</td></tr>
+          <tr><td class="mono">TS-CART-04</td><td>Verify cart persists data correctly within a session</td></tr>
+          <tr><td class="mono">TS-CART-05</td><td>Verify empty cart displays appropriate message</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Checkout Module</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">TS-CHK-01</td><td>Verify guest checkout flow completes successfully</td></tr>
+          <tr><td class="mono">TS-CHK-02</td><td>Verify registered user checkout flow completes successfully</td></tr>
+          <tr><td class="mono">TS-CHK-03</td><td>Verify mandatory field validations on billing/shipping address</td></tr>
+          <tr><td class="mono">TS-CHK-04</td><td>Verify order summary displays correct items, quantity, and total price</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Register / Login Module</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">TS-AUTH-01</td><td>Verify new user registration with valid details</td></tr>
+          <tr><td class="mono">TS-AUTH-02</td><td>Verify registration form validation for invalid/empty inputs</td></tr>
+          <tr><td class="mono">TS-AUTH-03</td><td>Verify login with valid credentials</td></tr>
+          <tr><td class="mono">TS-AUTH-04</td><td>Verify login failure with invalid credentials shows correct error message</td></tr>
+          <tr><td class="mono">TS-AUTH-05</td><td>Verify "Forgot Password" flow</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Search Module</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario ID</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">TS-SRCH-01</td><td>Verify search returns relevant results for valid keywords</td></tr>
+          <tr><td class="mono">TS-SRCH-02</td><td>Verify search behavior for invalid/no-match keywords</td></tr>
+          <tr><td class="mono">TS-SRCH-03</td><td>Verify search behavior for empty search input</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TEST CASES -->
+  <div id="testcases" class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>TC ID</th><th>Module</th><th>Title</th><th>Expected Result</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">TC-001</td>
+            <td><span class="module-tag">Books</span></td>
+            <td>Verify "Add to Cart" button visibility for all listed products</td>
+            <td>Button visible on every product, or stock-status message shown if unavailable</td>
+            <td><span class="sbadge s-fail">Fail</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-002</td>
+            <td><span class="module-tag">Books</span></td>
+            <td>Verify "Add to Cart" functionality for an in-stock product</td>
+            <td>Product added to cart, cart count increases by 1</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-003</td>
+            <td><span class="module-tag">Books</span></td>
+            <td>Verify sorting functionality on Books page</td>
+            <td>Products reordered from lowest to highest price</td>
+            <td><span class="sbadge s-pending">Not Executed</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-004</td>
+            <td><span class="module-tag">Shopping Cart</span></td>
+            <td>Verify cart total updates correctly when quantity is changed</td>
+            <td>Item subtotal and cart total recalculate correctly</td>
+            <td><span class="sbadge s-pending">Not Executed</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-005</td>
+            <td><span class="module-tag">Register/Login</span></td>
+            <td>Verify registration fails with invalid email format</td>
+            <td>Validation error shown, account not created</td>
+            <td><span class="sbadge s-pending">Not Executed</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-006</td>
+            <td><span class="module-tag">Register/Login</span></td>
+            <td>Verify registration fails when email already exists</td>
+            <td>Error shown, no duplicate account created</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-007</td>
+            <td><span class="module-tag">Register/Login</span></td>
+            <td>Verify successful registration with valid, unique details</td>
+            <td>Account created, user auto logged in</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-008</td>
+            <td><span class="module-tag">Register/Login</span></td>
+            <td>Verify login fails with incorrect password</td>
+            <td>Error shown, user not logged in</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-009</td>
+            <td><span class="module-tag">Register/Login</span></td>
+            <td>Verify successful login with correct credentials</td>
+            <td>User logged in, email shown at top</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-010</td>
+            <td><span class="module-tag">Gift Cards</span></td>
+            <td>Verify Gift Card requires recipient details before add to cart</td>
+            <td>Validation error shown, blocked until filled</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-011</td>
+            <td><span class="module-tag">Computers, Electronics</span></td>
+            <td>Verify "Add to Cart" button visibility across Computers and Electronics</td>
+            <td>Button visible on every product, or stock message shown</td>
+            <td><span class="sbadge s-fail">Fail</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-012</td>
+            <td><span class="module-tag">Manufacturer</span></td>
+            <td>Verify manufacturer page displays products or appropriate message</td>
+            <td>Products shown, or "No products found" message</td>
+            <td><span class="sbadge s-fail">Fail</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-013</td>
+            <td><span class="module-tag">Checkout</span></td>
+            <td>Verify State/Province list is available for India during checkout</td>
+            <td>Actual Indian states listed in dropdown</td>
+            <td><span class="sbadge s-fail">Fail</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-014</td>
+            <td><span class="module-tag">Checkout</span></td>
+            <td>Verify registered user checkout flow completes with valid details</td>
+            <td>Order placed, total reflects correct fees</td>
+            <td><span class="sbadge s-pass">Pass</span></td>
+          </tr>
+          <tr>
+            <td class="mono">TC-015</td>
+            <td><span class="module-tag">Search</span></td>
+            <td>Verify search returns relevant results for a valid keyword</td>
+            <td>Relevant products/categories returned</td>
+            <td><span class="sbadge s-fail">Fail</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11.5px;color:#888;margin-top:10px">Detailed steps, preconditions, and test data for each test case are maintained in the full <a href="Test-Cases/Test-Cases.md" style="color:#1a4a6e">Test-Cases.md</a> file in the repository.</p>
+  </div>
+
+  <!-- BUG REPORTS -->
+  <div id="bugs" class="panel">
+    <div class="card">
+      <h3>🐛 BUG-001 <span class="sbadge s-open" style="margin-left:8px">Open</span></h3>
+      <div class="bug-detail"><b>Title:</b><span>Missing "Add to Cart" button and no stock-status message across multiple product categories</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Books</span> <span class="module-tag">Computers</span> <span class="module-tag">Electronics</span></span></div>
+      <div class="bug-detail"><b>Description:</b><span>Several products across multiple categories do not display an "Add to Cart" button, with no alternative "Out of Stock" message. First found in Books, then confirmed in Computers (Desktops) and Electronics (Camera/Photo, Cell phones) — indicating a site-wide pattern, not a one-off issue.</span></div>
+      <div class="bug-detail"><b>Steps to Reproduce:</b><span>1. Navigate to Books, Computers → Desktops, or Electronics → Camera/Photo / Cell phones &nbsp;2. Observe the product grid &nbsp;3. Note some products show price/rating but no "Add to Cart" button</span></div>
+      <div class="bug-detail"><b>Test Data:</b><span>Fiction, Fiction EX (Books); Desktop PC with CDRW, Elite Desktop PC, Simple Computer (Desktops); all 4 products in Camera/Photo; Used phone (Cell phones)</span></div>
+      <div class="bug-detail"><b>Expected Result:</b><span>Every product should either show an "Add to Cart" button (if purchasable) or a clear status message explaining why it cannot be purchased</span></div>
+      <div class="bug-detail"><b>Actual Result:</b><span>Affected products display price and rating, but no purchase option and no explanation is shown, across multiple categories</span></div>
+      <div class="bug-detail"><b>Severity:</b><span><span class="sev-dot sev-high"></span>High <i style="color:#999;font-weight:400">(escalated from Medium — repeats across 3+ categories)</i></span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-high"></span>High</span></div>
+      <div class="bug-detail"><b>Environment:</b><span>Chrome, Desktop, demowebshop.tricentis.com</span></div>
+      <div class="bug-detail"><b>QA Note:</b><span>Does not break functionality (page loads fine, no error) but creates user confusion about availability — also cross-logged as UX suggestion SUGG-001.</span></div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-001.png" alt="BUG-001 Screenshot — Books page missing Add to Cart button">
+      </div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-001-2.png" alt="BUG-001 Screenshot — Desktops missing Add to Cart button">
+      </div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-001-3.png" alt="BUG-001 Screenshot — Camera/Photo missing Add to Cart button">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🐛 BUG-002 <span class="sbadge s-open" style="margin-left:8px">Open</span></h3>
+      <div class="bug-detail"><b>Title:</b><span>Manufacturer page ("Tricentis") displays empty content with no products or message</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Manufacturer / Navigation</span></span></div>
+      <div class="bug-detail"><b>Description:</b><span>Clicking "Tricentis" under Manufacturers loads a page showing only the heading "Tricentis" with no products and no "No products found" message.</span></div>
+      <div class="bug-detail"><b>Steps to Reproduce:</b><span>1. Click "Tricentis" under Manufacturers in the left sidebar &nbsp;2. Observe the page content</span></div>
+      <div class="bug-detail"><b>Test Data:</b><span>Manufacturer: Tricentis</span></div>
+      <div class="bug-detail"><b>Expected Result:</b><span>Page should show products from this manufacturer, or a clear "No products found" message</span></div>
+      <div class="bug-detail"><b>Actual Result:</b><span>Page loads with only the "Tricentis" heading; no products, no message</span></div>
+      <div class="bug-detail"><b>Severity:</b><span><span class="sev-dot sev-medium"></span>Low</span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-medium"></span>Low</span></div>
+      <div class="bug-detail"><b>Environment:</b><span>Chrome, Desktop, demowebshop.tricentis.com</span></div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-002.png" alt="BUG-002 Screenshot — Tricentis manufacturer page empty">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🐛 BUG-003 <span class="sbadge s-open" style="margin-left:8px">Open</span></h3>
+      <div class="bug-detail"><b>Title:</b><span>Search returns "No products found" for all keywords, including valid category names</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Search</span></span></div>
+      <div class="bug-detail"><b>Description:</b><span>Site search does not return results even for exact, existing category names such as "Books", "Computers", "Electronics", and "Gift cards" — all visible in the site's own navigation menu.</span></div>
+      <div class="bug-detail"><b>Steps to Reproduce:</b><span>1. Use the "Search store" box &nbsp;2. Enter a known valid keyword such as "Books" &nbsp;3. Click Search</span></div>
+      <div class="bug-detail"><b>Test Data:</b><span>Keywords tested: Books, Computers, Electronics, Gift cards</span></div>
+      <div class="bug-detail"><b>Expected Result:</b><span>Search should return relevant products or categories matching the keyword</span></div>
+      <div class="bug-detail"><b>Actual Result:</b><span>"No products were found that matched your criteria" shown for every keyword tested, even valid category names</span></div>
+      <div class="bug-detail"><b>Severity:</b><span><span class="sev-dot sev-high"></span>Critical <i style="color:#999;font-weight:400">(core feature completely non-functional)</i></span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-high"></span>High</span></div>
+      <div class="bug-detail"><b>Environment:</b><span>Chrome, Desktop, demowebshop.tricentis.com</span></div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-003.png" alt="BUG-003 Screenshot — Search Electronics no results">
+      </div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-003-2.png" alt="BUG-003 Screenshot — Search Gift cards no results">
+      </div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-003-3.png" alt="BUG-003 Screenshot — Search Books no results">
+      </div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-003-4.png" alt="BUG-003 Screenshot — Search Computers no results">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🐛 BUG-004 <span class="sbadge s-open" style="margin-left:8px">Open</span></h3>
+      <div class="bug-detail"><b>Title:</b><span>State/Province field does not show actual states when Country = India</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Checkout</span></span></div>
+      <div class="bug-detail"><b>Description:</b><span>On the Billing Address step, selecting India as Country does not populate the State/province dropdown with actual Indian states — only shows "Other (Non US)".</span></div>
+      <div class="bug-detail"><b>Steps to Reproduce:</b><span>1. Go to Checkout → Billing Address &nbsp;2. Select Country = India &nbsp;3. Check State/province dropdown</span></div>
+      <div class="bug-detail"><b>Test Data:</b><span>Country: India</span></div>
+      <div class="bug-detail"><b>Expected Result:</b><span>State/province dropdown should list actual Indian states</span></div>
+      <div class="bug-detail"><b>Actual Result:</b><span>Only "Other (Non US)" is available; no real state list shown</span></div>
+      <div class="bug-detail"><b>Severity:</b><span><span class="sev-dot sev-medium"></span>Low</span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-medium"></span>Low</span></div>
+      <div class="bug-detail"><b>Environment:</b><span>Chrome, Desktop, demowebshop.tricentis.com</span></div>
+      <div class="screenshot-box">
+        <img src="Screenshots/Defects/BUG-004.png" alt="BUG-004 Screenshot — State field not showing India states">
+      </div>
+    </div>
+  </div>
+
+  <!-- RTM -->
+  <div id="rtm" class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Req ID</th><th>Requirement</th><th>Scenario</th><th>Test Case</th><th>Bug</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">REQ-01</td><td>Users can view all products under Books category</td><td class="mono">TS-BOOK-01</td><td class="mono">TC-001</td><td class="mono">BUG-001</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-02</td><td>Users can add an available product to cart</td><td class="mono">TS-BOOK-02</td><td class="mono">TC-002</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-03</td><td>Unavailable products clearly indicate stock status</td><td class="mono">TS-BOOK-03</td><td class="mono">TC-001</td><td class="mono">BUG-001</td><td><span class="sbadge s-fail">Covered – Failed</span></td></tr>
+          <tr><td class="mono">REQ-04</td><td>Users can sort products by price/name</td><td class="mono">TS-BOOK-04</td><td class="mono">TC-003</td><td>—</td><td><span class="sbadge s-progress">In Progress</span></td></tr>
+          <tr><td class="mono">REQ-05</td><td>Users can update item quantity in cart</td><td class="mono">TS-CART-02</td><td class="mono">TC-004</td><td>—</td><td><span class="sbadge s-progress">In Progress</span></td></tr>
+          <tr><td class="mono">REQ-06</td><td>Registration form validates incorrect email format</td><td class="mono">TS-AUTH-02</td><td class="mono">TC-005, TC-006</td><td>—</td><td><span class="sbadge s-progress">In Progress</span></td></tr>
+          <tr><td class="mono">REQ-07</td><td>Guest checkout completes successfully</td><td class="mono">TS-CHK-01</td><td>—</td><td>—</td><td><span class="sbadge s-notstarted">Not Started</span></td></tr>
+          <tr><td class="mono">REQ-08</td><td>Login fails gracefully with invalid credentials</td><td class="mono">TS-AUTH-04</td><td class="mono">TC-008</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-09</td><td>Search returns relevant results</td><td class="mono">TS-SRCH-01</td><td class="mono">TC-015</td><td class="mono">BUG-003</td><td><span class="sbadge s-fail">Covered – Failed</span></td></tr>
+          <tr><td class="mono">REQ-10</td><td>New user can register with valid, unique details</td><td class="mono">TS-AUTH-01</td><td class="mono">TC-007</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-11</td><td>Registered user can log in with valid credentials</td><td class="mono">TS-AUTH-03</td><td class="mono">TC-009</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-12</td><td>Registered user checkout flow completes successfully</td><td class="mono">TS-CHK-02</td><td class="mono">TC-014</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-13</td><td>Order total correctly reflects payment method fees</td><td class="mono">TS-CHK-04</td><td class="mono">TC-014</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+          <tr><td class="mono">REQ-14</td><td>"Add to Cart" button visible for all products across all categories</td><td>—</td><td class="mono">TC-001, TC-011</td><td class="mono">BUG-001</td><td><span class="sbadge s-fail">Covered – Failed</span></td></tr>
+          <tr><td class="mono">REQ-15</td><td>Manufacturer pages display products or an appropriate empty-state message</td><td>—</td><td class="mono">TC-012</td><td class="mono">BUG-002</td><td><span class="sbadge s-fail">Covered – Failed</span></td></tr>
+          <tr><td class="mono">REQ-16</td><td>State/province list available for supported countries at checkout</td><td class="mono">TS-CHK-03</td><td class="mono">TC-013</td><td class="mono">BUG-004</td><td><span class="sbadge s-fail">Covered – Failed</span></td></tr>
+          <tr><td class="mono">REQ-17</td><td>Gift Card requires recipient details before being added to cart</td><td>—</td><td class="mono">TC-010</td><td>—</td><td><span class="sbadge s-covered">Covered</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SUGGESTIONS -->
+  <div id="suggestions" class="panel">
+    <div class="card">
+      <h3>💡 SUGG-001</h3>
+      <div class="bug-detail"><b>Related Bug:</b><span class="mono">BUG-001</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Books</span></span></div>
+      <div class="bug-detail"><b>Observation:</b><span>Some products on the Books listing page do not show an "Add to Cart" button, and there is no message indicating stock status (e.g., "Out of Stock," "Currently Unavailable," "Coming Soon").</span></div>
+      <div class="bug-detail"><b>Impact on User:</b><span>Users may assume the product is broken, the page failed to load correctly, or feel confused about why they cannot purchase the item — leading to a poor browsing experience and potential loss of trust in the platform.</span></div>
+      <div class="bug-detail"><b>Recommendation:</b><span>Display a clear status label (e.g., a greyed-out "Out of Stock" button or a small badge like "Unavailable") in place of the missing "Add to Cart" button, so users always understand product availability at a glance.</span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-medium"></span>Medium</span></div>
+      <div class="bug-detail"><b>Category:</b><span>Usability / Communication Gap</span></div>
+    </div>
+
+    <div class="card">
+      <h3>💡 SUGG-002</h3>
+      <div class="bug-detail"><b>Related Bug:</b><span>N/A</span></div>
+      <div class="bug-detail"><b>Module:</b><span><span class="module-tag">Shopping Cart</span></span></div>
+      <div class="bug-detail"><b>Observation:</b><span>The cart page does not have a dedicated "Remove" button per item. Users must check a small checkbox in the "Remove" column, then click a separate "Update shopping cart" button — a 2-step process.</span></div>
+      <div class="bug-detail"><b>Impact on User:</b><span>Users familiar with a single-click "Remove" (common on most e-commerce sites) may not realize they need to check the box AND click Update — leading to confusion or accidental cart changes.</span></div>
+      <div class="bug-detail"><b>Recommendation:</b><span>Add a direct "Remove" icon/button next to each cart item that removes it immediately on click, without needing a separate checkbox + update step.</span></div>
+      <div class="bug-detail"><b>Priority:</b><span><span class="sev-dot sev-medium"></span>Low</span></div>
+      <div class="bug-detail"><b>Category:</b><span>Usability</span></div>
+    </div>
+  </div>
+
+  <div class="credit">QA Portfolio Project by Monika Yadav &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/monikayadav10">LinkedIn</a> &nbsp;·&nbsp; Full documentation in repository files</div>
+</div>
+
+<script>
+function switchTab(id,btn){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+}
+</script>
+</body>
+</html>
